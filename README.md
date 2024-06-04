@@ -38,7 +38,7 @@ If you use local machine, create new environment and install dependencies from r
 The code is designed to log model parameters using the MLFlow library. To use MLFlow seamlessly, create an .env file that will contain your MLFlow credentials.
 
 If you haven't used MLFlow before, check out the tutorial at:
-[MLFlow get started tutorial] https://mlflow.org/docs/latest/getting-started/index.html
+[MLFlow get started tutorial] (https://mlflow.org/docs/latest/getting-started/index.html)
 
 
 
