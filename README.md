@@ -1,21 +1,32 @@
-This is a template.
-
-# Experiment title 
+# Early baseline for claim&cited-paragraph classification on PatentMatch
 
 The corresponding <a href:=https://www.notion.so/Plan-of-Experiment-PoE-template-efed4153dd7849c5979e9abb00293ec0>Plan of Experiment is provided here</a>.
 \
-The <a href:=https://www.notion.so/Experiment-Report-Template-450e66b444c74039bd1beda4f6c226a9>Full Report</a> describing the effort is also available.
+The <a href:=https://www.notion.so/Report-Mateusz-Early-Baseline-PatentMatch-Paragraph-Classification-2024-06-03-225701fd36884bbdaeae99efe7a4ca82>Full Report</a> describing the effort is also available.
 
 ## Goal of the experiment
-Do provide project goal from the PoE document.
+1. On-hands discovery of the PatentMatch dataset, obtaining very preliminary baseline quality on the claim&cited-paragraph classification task (2 texts on model input, one binary classification label on output).
+2. Learn how to use the newly introduced standards for implementation of research experiments.
 
-## A long section about how to run the code, examples of use, requirements, and similar.
-Do provide a bullet-proof description so that a person who never used this code will know how to get started.
+## Get started
+The code in this repository requires a GPU to provide reasonable computation time. If you don't have a cuda-compatible GPU on your local machine, you can use external providers such as Colab.
+All code was written on a Colab virtual machine with a T4 GPU and is Colab-friendly.
+I strongly recommend that if you don't have a GPU or the skills to set it up, start working with this repo on Colab.
 
-```
-Specifically, do provide a section with information how to copy the repository.
-git clone git@github.com:HumanDevIP/Experiment-repository-template.git
-```
+### System parameters of Colab env:
+
+DISTRIB_ID=Ubuntu
+DISTRIB_RELEASE=22.04
+DISTRIB_DESCRIPTION="Ubuntu 22.04.3 LTS"
+
+Python 3.10.12
+
+Colab runtime environment: T4 GPU
+
+## How to download repo
+
+!git clone git@github.com:matkolakowski/Early_Baseline_PatentMatch_Paragraph_Classification_Mateusz.git
+
 
 Also, state python version, and the compute environment where the code was executed (Ubuntu 22.04.LTS at a local machine, AWS EC2, and similar).
 
