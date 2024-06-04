@@ -1,1 +1,2 @@
-# do provide specific versions of your dependencies
+mlflow==2.13.0
+python-dotenv==1.0.1
