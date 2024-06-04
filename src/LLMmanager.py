@@ -6,7 +6,8 @@ from transformers import AutoTokenizer, AutoModelForSequenceClassification, Adam
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix, f1_score, matthews_corrcoef
 import mlflow
-
+from . import utils
+import numpy as np
 
 class TextSimilarityDataset(Dataset):
     """
@@ -109,7 +110,7 @@ class TextSimilarityLLMManager:
                 print(f'GPU found!')
 
 
-    def load_train_data(self, train_path) -> Tuple[DataLoader, DataLoader]:
+    def load_train_data(self, train_path):
         """
         Loads and preprocesses data, creating DataLoaders for training and validation.
 
@@ -188,14 +189,14 @@ class TextSimilarityLLMManager:
 
             avg_train_loss = train_loss / len(self.train_dataloader)
 
-            epoche_metrics = self.evaluate(self.validation_dataloader, 'Validation')
+            epoche_metrics, cm = self.evaluate(self.validation_dataloader, phase='Validation', epoch=epoch)
 
             if self.MLFlow_reporting:
                 mlflow.log_metric("train_loss", avg_train_loss, step=epoch)
 
 
 
-    def evaluate(self, dataloader: DataLoader, phase: str = 'Test'):
+    def evaluate(self, dataloader: DataLoader, phase: str = 'Test', epoch: str='None'):
         """
         Evaluates the model using the provided DataLoader.
 
@@ -221,7 +222,13 @@ class TextSimilarityLLMManager:
         mcc = matthews_corrcoef(true_labels, predictions)
         cm = confusion_matrix(true_labels, predictions)
 
-        metrics_dict = {"accuracy":accuracy, "f1":f1, "mcc":mcc, "cm":cm}
+        metrics_dict = {"accuracy":accuracy, "f1":f1, "mcc":mcc}
+        if epoch is not None:
+            cm_filename = f"artifacts/{utils.timestamp()}confusion_matrix_epoch_{epoch}.csv"
+        else:
+            cm_filename = f"artifacts/{utils.timestamp()}confusion_matrix.csv"
+        np.savetxt(cm_filename, cm, delimiter=",")
+
 
         if self.verbose:
             print(f"{phase} Accuracy: {accuracy}")
@@ -233,8 +240,10 @@ class TextSimilarityLLMManager:
 
             for metric_name, metric_value in metrics_dict.items():
                 mlflow.log_metric(metric_name, metric_value)
+            np.savetxt(cm_filename, cm, delimiter=",")
+            mlflow.log_artifact(cm_filename)
 
-        return metrics_dict
+        return metrics_dict, cm
 
 
     def run(self, test_path: str, train_path: Optional[str] = None):
