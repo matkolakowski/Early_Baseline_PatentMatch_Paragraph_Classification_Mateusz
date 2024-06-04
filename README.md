@@ -25,7 +25,7 @@ Colab runtime environment: T4 GPU
 
 ## How to download repo
 
-!git clone git@github.com:matkolakowski/Early_Baseline_PatentMatch_Paragraph_Classification_Mateusz.git
+`!git clone git@github.com:matkolakowski/Early_Baseline_PatentMatch_Paragraph_Classification_Mateusz.git`
 
 
 Also, state python version, and the compute environment where the code was executed (Ubuntu 22.04.LTS at a local machine, AWS EC2, and similar).
