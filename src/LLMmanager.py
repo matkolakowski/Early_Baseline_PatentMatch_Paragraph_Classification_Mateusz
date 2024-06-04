@@ -98,9 +98,15 @@ class TextSimilarityLLMManager:
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         self.tokenizer = AutoTokenizer.from_pretrained(tokenizer_name)
         self.model = AutoModelForSequenceClassification.from_pretrained(model_name).to(self.device)
-        self.optimizer = AdamW(self.model.parameters(), lr=config['learning_rate'])
+        self.optimizer = AdamW(self.model.parameters(), lr=config['learning_rate'], no_deprecation_warning=True)
         self.MLFlow_reporting = MLFlow_reporting
         self.verbose = verbose
+
+        if verbose:
+            if str(self.device) == 'cpu':
+                print(f'GPU not found, set GPU for training process')
+            elif str(self.device) == 'cuda':
+                print(f'GPU found!')
 
 
     def load_train_data(self, train_path) -> Tuple[DataLoader, DataLoader]:
