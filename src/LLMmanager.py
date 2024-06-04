@@ -130,14 +130,14 @@ class TextSimilarityLLMManager:
         val_dataset = TextSimilarityDataset(val_data, self.tokenizer, self.config['max_length'])
 
         # create a torch dataloader object
-        train_dataloader = DataLoader(train_dataset, batch_size=self.config['batch_size'], shuffle=True)
-        validation_dataloader = DataLoader(val_dataset, batch_size=self.config['batch_size'], shuffle=False)
+        self.train_dataloader = DataLoader(train_dataset, batch_size=self.config['batch_size'], shuffle=True)
+        self.validation_dataloader = DataLoader(val_dataset, batch_size=self.config['batch_size'], shuffle=False)
 
         if self.verbose:
-            print(f'Train data len: {len(train_dataloader)}')
-            print(f'Validation data len: {len(validation_dataloader)}')
+            print(f'Train data len: {len(train_data)}')
+            print(f'Validation data len: {len(val_data)}')
 
-        return train_dataloader, validation_dataloader
+
 
     def load_test_data(self, test_path) -> DataLoader:
         """
@@ -159,7 +159,7 @@ class TextSimilarityLLMManager:
 
         return test_dataloader
 
-    def train(self, train_dataloader: DataLoader, validation_dataloader: DataLoader):
+    def train(self):
         """
         Trains the model using the provided training DataLoader and evaluates it using the validation DataLoader.
 
@@ -175,7 +175,7 @@ class TextSimilarityLLMManager:
         for epoch in range(self.config['num_epochs']):
             self.model.train()
             train_loss = 0.0
-            for batch in train_dataloader:
+            for batch in self.train_dataloader:
                 batch = [item.to(self.device) for item in batch]
                 b_input_ids, b_attention_mask, b_token_type_ids, b_labels = batch
 
@@ -186,16 +186,16 @@ class TextSimilarityLLMManager:
                 loss.backward()
                 self.optimizer.step()
 
-            avg_train_loss = train_loss / len(train_dataloader)
+            avg_train_loss = train_loss / len(self.train_dataloader)
 
-            epoche_metrics = self.evaluate(validation_dataloader, 'Validation')
+            epoche_metrics = self.evaluate(self.validation_dataloader, 'Validation')
 
             if self.MLFlow_reporting:
                 mlflow.log_metric("train_loss", avg_train_loss, step=epoch)
 
 
 
-    def evaluate(self, dataloader: DataLoader, phase: str = 'Validation'):
+    def evaluate(self, dataloader: DataLoader, phase: str = 'Test'):
         """
         Evaluates the model using the provided DataLoader.
 
@@ -246,8 +246,8 @@ class TextSimilarityLLMManager:
             train_path (Optional[str]): The path to the training data file. If not provided, only evaluation is performed.
         """
         if train_path is not None:
-            train_dataloader, validation_dataloader = self.load_train_data(train_path)
-            self.train(train_dataloader, validation_dataloader)
+            self.load_train_data(train_path)
+            self.train()
 
         test_dataloader = self.load_test_data(test_path)
         self.evaluate(test_dataloader, 'Test')
