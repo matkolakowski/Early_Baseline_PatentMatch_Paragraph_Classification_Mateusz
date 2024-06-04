@@ -23,12 +23,24 @@ Python 3.10.12
 
 Colab runtime environment: T4 GPU
 
-## How to download repo
+### How to download repo
 
 `!git clone git@github.com:matkolakowski/Early_Baseline_PatentMatch_Paragraph_Classification_Mateusz.git`
 
+### Set up environment
 
-Also, state python version, and the compute environment where the code was executed (Ubuntu 22.04.LTS at a local machine, AWS EC2, and similar).
+If you use local machine, create new environment and install dependencies from requirements.txt
+
+`pip install -r requirements.txt`
+
+### Set up MLFlow credentials
+
+The code is designed to log model parameters using the MLFlow library. To use MLFlow seamlessly, create an .env file that will contain your MLFlow credentials.
+
+If you haven't used MLFlow before, check out the tutorial at:
+[MLFlow get started tutorial] https://mlflow.org/docs/latest/getting-started/index.html
+
+
 
 ## Data
 Do provide a description of how to obtain the necessary data. Specifically, do not store data files larger than 1 MB in the data folder.
