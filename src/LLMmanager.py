@@ -225,9 +225,8 @@ class TextSimilarityLLMManager:
         metrics_dict = {"accuracy":accuracy, "f1":f1, "mcc":mcc}
         if epoch is not None:
             cm_filename = f"artifacts/{utils.timestamp()}confusion_matrix_epoch_{epoch}.csv"
-        else:
-            epoch = 0
-            cm_filename = f"artifacts/{utils.timestamp()}confusion_matrix.csv"
+        if phase == "Test":
+            cm_filename = f"artifacts/{utils.timestamp()}confusion_matrix_test.csv"
         np.savetxt(cm_filename, cm, delimiter=",")
 
 
