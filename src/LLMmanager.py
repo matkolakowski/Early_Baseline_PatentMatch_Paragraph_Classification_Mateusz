@@ -239,7 +239,10 @@ class TextSimilarityLLMManager:
         if self.MLFlow_reporting:
 
             for metric_name, metric_value in metrics_dict.items():
-                mlflow.log_metric(metric_name, metric_value, step=epoch)
+                if phase == 'Validation':
+                    mlflow.log_metric(metric_name, metric_value, step=epoch)
+                else:
+                    mlflow.log_metric(metric_name, metric_value)
             np.savetxt(cm_filename, cm, delimiter=",")
             mlflow.log_artifact(cm_filename)
 
