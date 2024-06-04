@@ -196,7 +196,7 @@ class TextSimilarityLLMManager:
 
 
 
-    def evaluate(self, dataloader: DataLoader, phase: str = 'Test', epoch: str='None'):
+    def evaluate(self, dataloader: DataLoader, phase: str = 'Test', epoch: int='None'):
         """
         Evaluates the model using the provided DataLoader.
 
@@ -226,6 +226,7 @@ class TextSimilarityLLMManager:
         if epoch is not None:
             cm_filename = f"artifacts/{utils.timestamp()}confusion_matrix_epoch_{epoch}.csv"
         else:
+            epoch = 0
             cm_filename = f"artifacts/{utils.timestamp()}confusion_matrix.csv"
         np.savetxt(cm_filename, cm, delimiter=",")
 
@@ -239,7 +240,7 @@ class TextSimilarityLLMManager:
         if self.MLFlow_reporting:
 
             for metric_name, metric_value in metrics_dict.items():
-                mlflow.log_metric(metric_name, metric_value)
+                mlflow.log_metric(metric_name, metric_value, step=epoch)
             np.savetxt(cm_filename, cm, delimiter=",")
             mlflow.log_artifact(cm_filename)
 
